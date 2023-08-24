@@ -1,7 +1,12 @@
-import {Reading, ReadingProcessor} from "../src/readingsProcessor";
-import {clone} from "ramda";
+import { Reading, ReadingProcessor } from '../src/readingsProcessor'
+import { clone } from 'ramda'
 
 describe('process readings', () => {
+  let processReadings
+  beforeEach(() => {
+    processReadings = new ReadingProcessor().processReadings
+  })
+
   const buildReading = (type: string = 'environmental'): Reading => {
     return {
       data: [0],
@@ -24,7 +29,7 @@ describe('process readings', () => {
 
     const expected = {}
 
-    expect(ReadingProcessor.processReadings([given])).toEqual(expected)
+    expect(processReadings([given])).toEqual(expected)
   })
 
   it('should ignore readings that are inactive', () => {
@@ -33,7 +38,7 @@ describe('process readings', () => {
 
     const expected = {}
 
-    expect(ReadingProcessor.processReadings([given])).toEqual(expected)
+    expect(processReadings([given])).toEqual(expected)
   })
 
   test('environmental is grouped', () => {
@@ -44,7 +49,7 @@ describe('process readings', () => {
       environmental: [buildFarenheitReading()]
     }
 
-    expect(ReadingProcessor.processReadings([given])).toEqual(expected)
+    expect(processReadings([given])).toEqual(expected)
   })
 
   test('asset is grouped', () => {
@@ -54,7 +59,7 @@ describe('process readings', () => {
       asset: [buildFarenheitReading('asset')]
     }
 
-    expect(ReadingProcessor.processReadings([given])).toEqual(expected)
+    expect(processReadings([given])).toEqual(expected)
   })
 
   test('vehicle is grouped', () => {
@@ -64,13 +69,13 @@ describe('process readings', () => {
       vehicle: [buildFarenheitReading('vehicle')]
     }
 
-    expect(ReadingProcessor.processReadings([given])).toEqual(expected)
+    expect(processReadings([given])).toEqual(expected)
   })
 
   test('other types are ignored', () => {
     const given = buildReading('something unknown')
 
-    expect(ReadingProcessor.processReadings([given])).toEqual({})
+    expect(processReadings([given])).toEqual({})
   })
 
   test('will group multiple readings', () => {
@@ -87,7 +92,7 @@ describe('process readings', () => {
       vehicle: [buildFarenheitReading('vehicle')]
     }
 
-    expect(ReadingProcessor.processReadings(given)).toEqual(expected)
+    expect(processReadings(given)).toEqual(expected)
   })
 
   // todo this test does not pass because currently the code mutates the input. This is a bad thing. Perhaps after your functional refactoring you can enable this test and get it to pass?
@@ -96,7 +101,7 @@ describe('process readings', () => {
 
     const identicalToGiven = clone(given)
 
-    ReadingProcessor.processReadings(given)
+    processReadings(given)
 
     expect(given).toEqual(identicalToGiven)
   })
