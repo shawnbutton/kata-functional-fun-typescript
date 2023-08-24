@@ -1,4 +1,4 @@
-# Kata Template
+# ReadingsProcessor Template
 
 This is the TypeScript code kata template.
 
